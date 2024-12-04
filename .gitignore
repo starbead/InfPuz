@@ -1,0 +1,15 @@
+Library
+Temp
+obj
+Logs
+Packages
+UserSettings
+*.DotSettings
+*.csproj
+*.pidb
+*.sln
+*.suo
+*.unityproj
+*.user
+*.userprefs
+*.vsconfig
