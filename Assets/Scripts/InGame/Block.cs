@@ -27,6 +27,7 @@ public class Block : MonoBehaviour
     public void SetBlock(int block)
     {
         spriteIcon.sprite = blocks[block];
+        col.SetActive(block != 0);
     }
     private void Update()
     {
