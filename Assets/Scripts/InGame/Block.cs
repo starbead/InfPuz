@@ -31,20 +31,20 @@ public class Block : MonoBehaviour
     }
     private void Update()
     {
-        var hit = Physics2D.RaycastAll(this.transform.position, Vector2.down, 1f, mask);
-        if(hit != null && hit.Length > 0)
+        var pos = this.transform.position;
+        var hit = Physics2D.LinecastAll(pos + (Vector3.down * 0.35f), pos + (Vector3.up * 0.35f));
+        if(hit != null && hit.Length > 1)
         {
             foreach(var col in hit)
             {
-                if (col.collider == null)
+                if (col.collider == null && col.collider.transform.position.x != this.transform.position.x)
                     continue;
-                if (col.collider.transform.position.x != this.transform.position.x)
+                if (col.collider.transform.position.y == this.transform.position.y)
                     continue;
-                if (col.collider.transform.position.y >= this.transform.position.y)
-                    continue;
-                Debug.LogError("@@");
             }
+            return;
         }
+        transform.position = transform.position + (Vector3.down * 0.685f * Time.deltaTime);
     }
 
     public int GetLength => blocks.Length;

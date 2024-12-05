@@ -36,6 +36,8 @@ public class PuzzleController : MonoBehaviour
 
         TryGetBlock();
         UpdateBlock();
+        TryGetBlock();
+        UpdateBlock();
         RenderBlock();
     }
     public void ReSetStage()
@@ -163,16 +165,17 @@ public class PuzzleController : MonoBehaviour
     {
         var value = board[index1, index2];
         board[index1, index2] = 0;
+        blockList[index1][index2].SetBlock(0);
         curScore += 1;
         ClearBlock_Recursive(index1, index2, value);
-        UpdateBlock();
+        //UpdateBlock();
         if(TryGetBlock() == false)
         {
             GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
             ReSetStage();
             return;
         }
-        RenderBlock();
+        //RenderBlock();
     }
     void ClearBlock_Recursive(int i, int j, int value)
     {
@@ -181,6 +184,7 @@ public class PuzzleController : MonoBehaviour
         if(j > 0 && board[i, j - 1] == value)
         {
             board[i, j - 1] = 0;
+            blockList[i][j - 1].SetBlock(0);
             curScore += 1;
             ClearBlock_Recursive(i, j - 1, value);
         }
@@ -189,6 +193,7 @@ public class PuzzleController : MonoBehaviour
         if(j < row - 1 && board[i, j + 1] == value)
         {
             board[i, j + 1] = 0;
+            blockList[i][j + 1].SetBlock(0);
             curScore += 1;
             ClearBlock_Recursive(i, j + 1, value);
         }
@@ -197,6 +202,7 @@ public class PuzzleController : MonoBehaviour
         if(i > 0 && board[i - 1, j] == value)
         {
             board[i - 1, j] = 0;
+            blockList[i - 1][j].SetBlock(0);
             curScore += 1;
             ClearBlock_Recursive(i - 1, j, value);
         }
@@ -205,6 +211,7 @@ public class PuzzleController : MonoBehaviour
         if(i < col - 1 && board[i + 1, j] == value)
         {
             board[i + 1, j] = 0;
+            blockList[i + 1][j].SetBlock(0);
             curScore += 1;
             ClearBlock_Recursive(i + 1, j, value);
         }
