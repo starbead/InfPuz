@@ -36,8 +36,6 @@ public class PuzzleController : MonoBehaviour
 
         TryGetBlock();
         UpdateBlock();
-        TryGetBlock();
-        UpdateBlock();
         RenderBlock();
     }
     public void ReSetStage()
@@ -168,14 +166,7 @@ public class PuzzleController : MonoBehaviour
         blockList[index1][index2].SetBlock(0);
         curScore += 1;
         ClearBlock_Recursive(index1, index2, value);
-        //UpdateBlock();
-        if(TryGetBlock() == false)
-        {
-            GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
-            ReSetStage();
-            return;
-        }
-        //RenderBlock();
+        StartCoroutine(PlayEffect_Cor());
     }
     void ClearBlock_Recursive(int i, int j, int value)
     {
@@ -216,7 +207,31 @@ public class PuzzleController : MonoBehaviour
             ClearBlock_Recursive(i + 1, j, value);
         }
     }
+    IEnumerator PlayEffect_Cor()
+    {
+        yield return null;
+        yield return new WaitUntil(() =>
+        {
+            foreach(var blocks in blockList)
+            {
+                foreach (var block in blocks)
+                {
+                    if (block.isMove) return false;
+                }
+            }
 
+            return true;
+        });
+
+        UpdateBlock();
+        if (TryGetBlock() == false)
+        {
+            GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
+            ReSetStage();
+            yield break;
+        }
+        RenderBlock();
+    }
     private void Update()
     {
         if (Input.GetMouseButtonUp(0))
