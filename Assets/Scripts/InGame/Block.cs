@@ -12,6 +12,7 @@ public class Block : MonoBehaviour
     RaycastHit2D ray;
     LayerMask mask;
     Vector2 blockSize = new Vector2(0.7f, 0.7f);
+    Vector2 originPos = new Vector2(0, 0);
     bool isEnd = true;
     (int, int) BlockIndex = (0, 0);
     private void Start()
@@ -23,9 +24,11 @@ public class Block : MonoBehaviour
     {
         BlockIndex.Item1 = x;
         BlockIndex.Item2 = y;
+        originPos = this.transform.position;
     }
     public void SetBlock(int block)
     {
+        this.transform.position = originPos;
         spriteIcon.sprite = blocks[block];
         col.SetActive(block != 0);
     }
