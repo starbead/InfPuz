@@ -19,6 +19,7 @@ public class PuzzleController : MonoBehaviour
     System.Random rand = new System.Random();
     PuzzleBase mode;
 
+    bool canClick = true;
     int curScore = 0;
     private void Awake()
     {
@@ -80,12 +81,14 @@ public class PuzzleController : MonoBehaviour
         }
 
         GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
+        canClick = true;
     }
     void OnClick_Block(int index1, int index2)
     {
+        canClick = false;
         var value = board[index1, index2];
         board[index1, index2] = 0;
-        blockList[index1][index2].SetBlock(0);
+        blockList[index1][index2].PlayEffect();
         curScore += 1;
         ClearBlock_Recursive(index1, index2, value);
         StartCoroutine((mode as PuzzleMode).PlayEffect_Cor(originBlock.GetLength, RenderBlock, ReSetStage));
@@ -97,7 +100,7 @@ public class PuzzleController : MonoBehaviour
         if(j > 0 && board[i, j - 1] == value)
         {
             board[i, j - 1] = 0;
-            blockList[i][j - 1].SetBlock(0);
+            blockList[i][j - 1].PlayEffect();
             curScore += 1;
             ClearBlock_Recursive(i, j - 1, value);
         }
@@ -106,7 +109,7 @@ public class PuzzleController : MonoBehaviour
         if(j < row - 1 && board[i, j + 1] == value)
         {
             board[i, j + 1] = 0;
-            blockList[i][j + 1].SetBlock(0);
+            blockList[i][j + 1].PlayEffect();
             curScore += 1;
             ClearBlock_Recursive(i, j + 1, value);
         }
@@ -115,7 +118,7 @@ public class PuzzleController : MonoBehaviour
         if(i > 0 && board[i - 1, j] == value)
         {
             board[i - 1, j] = 0;
-            blockList[i - 1][j].SetBlock(0);
+            blockList[i - 1][j].PlayEffect();
             curScore += 1;
             ClearBlock_Recursive(i - 1, j, value);
         }
@@ -124,7 +127,7 @@ public class PuzzleController : MonoBehaviour
         if(i < col - 1 && board[i + 1, j] == value)
         {
             board[i + 1, j] = 0;
-            blockList[i + 1][j].SetBlock(0);
+            blockList[i + 1][j].PlayEffect();
             curScore += 1;
             ClearBlock_Recursive(i + 1, j, value);
         }
@@ -155,6 +158,8 @@ public class PuzzleController : MonoBehaviour
     }
     private void Update()
     {
+        if (canClick == false) return;
+
         if (Input.GetMouseButtonUp(0))
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);

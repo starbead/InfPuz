@@ -8,6 +8,7 @@ public class Block : MonoBehaviour
     [SerializeField] SpriteRenderer spriteIcon = null;
     [SerializeField] Sprite[] blocks = null;
     [SerializeField] Collider2D col = null;
+    [SerializeField] GameObject[] effects = null;
 
     RaycastHit2D ray;
     LayerMask mask;
@@ -15,6 +16,9 @@ public class Block : MonoBehaviour
     Vector2 originPos = new Vector2(0, 0);
     bool isEnd = true;
     (int, int) BlockIndex = (0, 0);
+
+    int curIdx = 0;
+    float speed = 3.5f;
     private void Start()
     {
         mask = LayerMask.GetMask("Block");
@@ -28,9 +32,16 @@ public class Block : MonoBehaviour
     }
     public void SetBlock(int block)
     {
+        curIdx = block;
         this.transform.position = originPos;
-        spriteIcon.sprite = blocks[block];
-        col.SetActive(block != 0);
+        spriteIcon.sprite = blocks[curIdx];
+        col.SetActive(curIdx != 0);
+    }
+    public void PlayEffect()
+    {
+        if (curIdx == 0) return;
+        
+        SetBlock(0);
     }
     private void Update()
     {
@@ -53,7 +64,7 @@ public class Block : MonoBehaviour
 
         if (isEnd) return;
 
-        transform.position = transform.position + (Vector3.down * 0.685f * Time.deltaTime * 3.5f);
+        transform.position = transform.position + (Vector3.down * 0.685f * Time.deltaTime * Random.Range(7f, 8f));
     }
 
     public int GetLength => blocks.Length;

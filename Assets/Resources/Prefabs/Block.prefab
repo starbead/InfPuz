@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 695917624481719240}
   - component: {fileID: 8866313209202533816}
   - component: {fileID: 2276333365794106875}
-  - component: {fileID: 7747696038356911945}
+  - component: {fileID: 7942575403595681529}
   m_Layer: 6
   m_Name: Block
   m_TagString: Block
@@ -105,8 +105,14 @@ MonoBehaviour:
   - {fileID: 21300000, guid: c364be2ac6623624bb39065feb452824, type: 3}
   - {fileID: 21300000, guid: 4539ae11ba2e8ca48a75c6e8c92e55ab, type: 3}
   - {fileID: 21300000, guid: 6975a6f5e9aa4474b8d00300f03b27ad, type: 3}
-  col: {fileID: 7747696038356911945}
---- !u!61 &7747696038356911945
+  col: {fileID: 7942575403595681529}
+  effects:
+  - {fileID: 0}
+  - {fileID: 519848125488778354, guid: ffe786bf527311f4eb97cb07f45eccc2, type: 3}
+  - {fileID: 519848125488778354, guid: 71b2103601d058542a630fe5b810e56f, type: 3}
+  - {fileID: 519848125488778354, guid: 6561646c029711c45809a34f5de0b004, type: 3}
+  - {fileID: 519848125488778354, guid: 64a4f9667e9b1d241890588cb8843e2d, type: 3}
+--- !u!61 &7942575403595681529
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
