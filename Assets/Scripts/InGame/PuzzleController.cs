@@ -17,6 +17,7 @@ public class PuzzleController : MonoBehaviour
     int[,] board = null;    // [0,?] => 가장 위층
     List<List<Block>> blockList = null;
     System.Random rand = new System.Random();
+    PuzzleBase mode;
 
     int curScore = 0;
     private void Awake()
@@ -31,19 +32,21 @@ public class PuzzleController : MonoBehaviour
         curScore = 0;
         board = new int[col, row];
         blockList = new List<List<Block>>();
+        mode = new PuzzleHard(board, blockList);
         // 블럭, 프레임 세팅
         initFrame();
-
-        TryGetBlock();
-        UpdateBlock();
+        
+        mode.TryGetBlock(originBlock.GetLength);
+        mode.UpdateBlock();
         RenderBlock();
     }
     public void ReSetStage()
     {
+        GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
         curScore = 0;
         board = new int[col, row];
-        TryGetBlock();
-        UpdateBlock();
+        mode.TryGetBlock(originBlock.GetLength);
+        mode.UpdateBlock();
         RenderBlock();
     }
     public void initFrame()
@@ -78,87 +81,6 @@ public class PuzzleController : MonoBehaviour
 
         GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
     }
-    public bool TryGetBlock()
-    {
-        if (CheckFail()) return false;
-
-        bool needUp = false;
-        for(int i = 0; i < row; i++)
-        {
-            if (board[col - 1, i] == 0)
-                continue;
-            needUp = true;
-            break;
-        }
-
-        if(needUp)
-        {
-            for(int i = 1; i < col; i++)
-            {
-                for(int j = 0; j < row; j++)
-                {
-                    if (board[i, j] == 0)
-                        continue;
-                    board[i - 1, j] = board[i, j];
-                }
-            }
-
-            for (int i = 0; i < row; i++)
-                board[col - 1, i] = 0;
-
-            RandBlock();
-        }
-        else
-        {
-            RandBlock();
-        }
-
-        return true;
-    }
-    void RandBlock()
-    {
-        for(int i = 0; i < row; i++)
-        {
-            var num = rand.Next(1, originBlock.GetLength);
-            board[col - 1, i] = num;
-        }
-    }
-    public bool CheckFail()
-    {
-        bool result = false;
-
-        for(int i = 0; i < row; i++)
-        {
-            if (board[0, i] == 0)
-                continue;
-
-            result = true;
-            break;
-        }
-
-        return result;
-    }
-    // 블록을 부순뒤에 위치 정리
-    public void UpdateBlock()
-    {
-        Queue<int> queue = new Queue<int>();
-        for(int i = 0; i < row; i++)
-        {
-            for(int j = col - 1; j >= 0; j--)
-            {
-                if (board[j, i] != 0)
-                    queue.Enqueue(board[j, i]);
-            }
-
-            for(int j = col - 1; j >= 0; j--)
-            {
-                if (queue.Count > 0)
-                    board[j, i] = queue.Dequeue();
-                else
-                    board[j, i] = 0;
-            }
-        }
-    }
     void OnClick_Block(int index1, int index2)
     {
         var value = board[index1, index2];
@@ -166,7 +88,7 @@ public class PuzzleController : MonoBehaviour
         blockList[index1][index2].SetBlock(0);
         curScore += 1;
         ClearBlock_Recursive(index1, index2, value);
-        StartCoroutine(PlayEffect_Cor());
+        StartCoroutine((mode as PuzzleMode).PlayEffect_Cor(originBlock.GetLength, RenderBlock, ReSetStage));
     }
     void ClearBlock_Recursive(int i, int j, int value)
     {
@@ -223,10 +145,9 @@ public class PuzzleController : MonoBehaviour
             return true;
         });
 
-        UpdateBlock();
-        if (TryGetBlock() == false)
+        mode.UpdateBlock();
+        if (mode.TryGetBlock(originBlock.GetLength) == false)
         {
-            GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
             ReSetStage();
             yield break;
         }
@@ -250,8 +171,8 @@ public class PuzzleController : MonoBehaviour
     // 테스트용 치트코드
     public void Cheat()
     {
-        UpdateBlock();
-        TryGetBlock();
+        mode.UpdateBlock();
+        mode.TryGetBlock(originBlock.GetLength);
         RenderBlock();
     }
 }
