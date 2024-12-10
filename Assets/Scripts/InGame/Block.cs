@@ -79,9 +79,8 @@ public class Block : MonoBehaviour
 
         if (isEnd) return;
 
-        transform.position = transform.position + (Vector3.down * 0.685f * Time.deltaTime * Random.Range(7f, 8f));
+        transform.position = transform.position + (Vector3.down * 0.685f * Time.deltaTime * 7.5f);
     }
-
     public int GetLength => blocks.Length;
     public (int, int) GetIndex => BlockIndex;
     public bool isMove => !isEnd;

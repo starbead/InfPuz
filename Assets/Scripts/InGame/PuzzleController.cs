@@ -26,6 +26,8 @@ public class PuzzleController : MonoBehaviour
     int curScore = 0;
     private void Awake()
     {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
         initailize();
     }
     public void initailize()
@@ -52,7 +54,14 @@ public class PuzzleController : MonoBehaviour
     {
         GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
         curScore = 0;
-        board = new int[col, row];
+        for(int i = 0; i < board.GetLength(0); i++)
+        {
+            for (int j = 0; j < board.GetLength(1); j++)
+                board[i, j] = 0;
+        }
+        for (int i = 0; i < nextBoard.Length; i++)
+            nextBoard[i] = 0;
+
         mode.TryGetBlock(originBlock.GetLength);
         mode.UpdateBlock();
         RenderBlock();
