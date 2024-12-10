@@ -14,11 +14,12 @@ public class Block : MonoBehaviour
     LayerMask mask;
     Vector2 blockSize = new Vector2(0.7f, 0.7f);
     Vector2 originPos = new Vector2(0, 0);
+    Vector2 effectPos = new Vector2(0, 0);
     bool isEnd = true;
+    bool isDummy = false;
     (int, int) BlockIndex = (0, 0);
 
     int curIdx = 0;
-    float speed = 3.5f;
     private void Start()
     {
         mask = LayerMask.GetMask("Block");
@@ -26,26 +27,39 @@ public class Block : MonoBehaviour
     }
     public void initData(int x, int y)
     {
+        isDummy = false;
         BlockIndex.Item1 = x;
         BlockIndex.Item2 = y;
-        originPos = this.transform.position;
+        originPos = this.transform.localPosition;
+        effectPos = this.transform.position;
+    }
+    public void SetDummy(int block)
+    {
+        isDummy = true;
+        spriteIcon.sprite = blocks[block];
+        Color c = spriteIcon.color;
+        c.a = 0.5f;
+        spriteIcon.color = c;
+        transform.tag = "Untagged";
     }
     public void SetBlock(int block)
     {
         curIdx = block;
-        this.transform.position = originPos;
         spriteIcon.sprite = blocks[curIdx];
         col.SetActive(curIdx != 0);
+        this.transform.localPosition = originPos;
     }
     public void PlayEffect()
     {
         if (curIdx == 0) return;
         var obj = Instantiate(effects[curIdx]);
-        obj.transform.position = originPos;
+        obj.transform.position = effectPos;
         SetBlock(0);
     }
     private void Update()
     {
+        if (isDummy) return;
+
         var pos = this.transform.position;
         var hit = Physics2D.LinecastAll(pos + (Vector3.down * 0.35f), pos + (Vector3.up * 0.35f));
         if (hit != null && hit.Length > 1)

@@ -17,12 +17,45 @@ public class PuzzleHard : PuzzleBase, PuzzleMode
     }
     public override void RandBlock(int blockCount)
     {
+        if(nextBoard[0] == 0)
+        {
+            for (int i = 0; i < board.GetLength(1); i++)
+            {
+                var num = rand.Next(1, blockCount);
+                board[0, i] = num;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < board.GetLength(1); i++)
+            {
+                board[0, i] = nextBoard[i];
+            }
+        }
+
         for (int i = 0; i < board.GetLength(1); i++)
         {
             var num = rand.Next(1, blockCount);
-            board[0, i] = num;
+            nextBoard[i] = num;
         }
     }
+
+    public override void initNextBlock(int[] nextBoard, List<Block> nextBlockList, Block origin)
+    {
+        float xPos = -1.4f;
+        for (int i = 0; i < nextBoard.Length; i++)
+        {
+            var obj = Instantiate(origin);
+            obj.transform.position = new Vector3(xPos, 2.9f, 0f);   // 2.8f is original
+            obj.SetDummy(0);
+            nextBlockList.Add(obj);
+            xPos += 0.685f;
+        }
+
+        this.nextBlockList = nextBlockList;
+        this.nextBoard = nextBoard;
+    }
+
     public IEnumerator PlayEffect_Cor(int blockCount, Action action1 = null, Action action2 = null)
     {
         yield return null;

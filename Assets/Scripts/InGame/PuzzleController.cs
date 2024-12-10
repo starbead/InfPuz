@@ -11,12 +11,15 @@ public class PuzzleController : MonoBehaviour
     [Header("Block"), Space(10)]
     [SerializeField] Block originBlock = null;
     [SerializeField] Transform[] floors = null;
-
+    
     public static PuzzleController instance = null;
 
     int[,] board = null;    // [0,?] => 가장 위층
     List<List<Block>> blockList = null;
-    System.Random rand = new System.Random();
+
+    int[] nextBoard = null;
+    List<Block> nextBlockList = null;
+
     PuzzleBase mode;
 
     bool canClick = true;
@@ -34,9 +37,13 @@ public class PuzzleController : MonoBehaviour
         board = new int[col, row];
         blockList = new List<List<Block>>();
         mode = new PuzzleHard(board, blockList);
+
+        nextBoard = new int[row];
+        nextBlockList = new List<Block>();
+
         // 블럭, 프레임 세팅
         initFrame();
-        
+        mode.initNextBlock(nextBoard, nextBlockList, originBlock);
         mode.TryGetBlock(originBlock.GetLength);
         mode.UpdateBlock();
         RenderBlock();
@@ -78,6 +85,11 @@ public class PuzzleController : MonoBehaviour
             {
                 blockList[i][j].SetBlock(board[i, j]);
             }
+        }
+
+        for(int i = 0; i < nextBlockList.Count; i++)
+        {
+            nextBlockList[i].SetDummy(nextBoard[i]);
         }
 
         GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
