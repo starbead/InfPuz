@@ -8,7 +8,7 @@ public class Block : MonoBehaviour
     [SerializeField] SpriteRenderer spriteIcon = null;
     [SerializeField] Sprite[] blocks = null;
     [SerializeField] Collider2D col = null;
-    [SerializeField] GameObject[] effects = null;
+    [SerializeField] ParticleEffect[] effects = null;
 
     RaycastHit2D ray;
     LayerMask mask;
@@ -40,7 +40,8 @@ public class Block : MonoBehaviour
     public void PlayEffect()
     {
         if (curIdx == 0) return;
-        
+        var obj = Instantiate(effects[curIdx]);
+        obj.transform.position = originPos;
         SetBlock(0);
     }
     private void Update()
