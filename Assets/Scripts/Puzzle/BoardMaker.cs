@@ -19,6 +19,8 @@ public class BoardMaker : MonoBehaviour
     int[] nextBoard = null;
     List<Blocks> nextBlockList = null;
 
+    public List<List<Vector2>> posList { get; private set; }
+
     int row = 5;
     int col = 7;
     public void initData()
@@ -35,15 +37,20 @@ public class BoardMaker : MonoBehaviour
 
     void SetBackGround()
     {
+        posList = new List<List<Vector2>>();
         float xPos = -1.3f;
         float yPos = -2f;
+
         for(int i = 0; i < col; i++)
         {
             xPos = -1.3f;
-            for(int j = 0; j < row; j++)
+            posList.Add(new List<Vector2>());
+            for (int j = 0; j < row; j++)
             {
+                var pos = new Vector2(xPos, yPos);
+                posList[i].Add(pos);
                 var obj = Instantiate(originTile, tileTF);
-                obj.transform.localPosition = new Vector3(xPos, yPos, 0);
+                obj.transform.localPosition = pos;
                 xPos += 0.6f;
             }
             yPos += 0.6f;
@@ -79,5 +86,4 @@ public class BoardMaker : MonoBehaviour
             nextBlockList[i].HideBlock();
         }
     }
-    
 }
