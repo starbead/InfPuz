@@ -27,8 +27,10 @@ public class BoardMaker : MonoBehaviour
 
     int row = 5;
     int col = 7;
+    int curScore = 0;
     public void initData()
     {
+        curScore = 0;
         board = new int[col, row];
         blockList = new List<List<Blocks>>();
 
@@ -41,6 +43,8 @@ public class BoardMaker : MonoBehaviour
         mode.initNextBlock(nextBoard, nextBlockList, originBlock);
         mode.TryGetBlock(MAXBlock);
         Rendering_Block();
+
+        GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
     }
 
     void initSetting()
@@ -78,7 +82,10 @@ public class BoardMaker : MonoBehaviour
     }
     public void ReSetBlock()
     {
-        for(int i = 0; i < col; i++)
+        curScore = 0;
+        GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
+
+        for (int i = 0; i < col; i++)
         {
             for (int j = 0; j < row; j++)
                 board[i, j] = 0;
@@ -95,6 +102,9 @@ public class BoardMaker : MonoBehaviour
             nextBoard[i] = 0;
             nextBlockList[i].HideBlock();
         }
+
+        mode.TryGetBlock(MAXBlock);
+        Rendering_Block();
     }
     public void Rendering_Block()
     {
@@ -106,12 +116,15 @@ public class BoardMaker : MonoBehaviour
 
         for (int i = 0; i < nextBlockList.Count; i++)
             nextBlockList[i].SetDummy(nextBoard[i]);
+
+        GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
     }
     public void BreakBlock(int index1, int index2)
     {
         var value = board[index1, index2];
         board[index1, index2] = 0;
         blockList[index1][index2].Explode();
+        curScore += 1;
         BreakBlock_Recursive(index1, index2, value);
         StartCoroutine((mode as PuzzleMode).PlayEffect_Cor(MAXBlock, Rendering_Block, ReSetBlock));
     }
@@ -123,6 +136,7 @@ public class BoardMaker : MonoBehaviour
         {
             board[i, j - 1] = 0;
             blockList[i][j - 1].Explode();
+            curScore += 1;
             BreakBlock_Recursive(i, j - 1, value);
         }
 
@@ -131,6 +145,7 @@ public class BoardMaker : MonoBehaviour
         {
             board[i, j + 1] = 0;
             blockList[i][j + 1].Explode();
+            curScore += 1;
             BreakBlock_Recursive(i, j + 1, value);
         }
 
@@ -139,6 +154,7 @@ public class BoardMaker : MonoBehaviour
         {
             board[i - 1, j] = 0;
             blockList[i - 1][j].Explode();
+            curScore += 1;
             BreakBlock_Recursive(i - 1, j, value);
         }
 
@@ -147,6 +163,7 @@ public class BoardMaker : MonoBehaviour
         {
             board[i + 1, j] = 0;
             blockList[i + 1][j].Explode();
+            curScore += 1;
             BreakBlock_Recursive(i + 1, j, value);
         }
     }

@@ -68,9 +68,14 @@ public class ModeHard : ModeBase, PuzzleMode
             yield return waitGravity;
 
         // 추가하기
-        TryGetBlock(blockCount);
-        action1?.Invoke();
+        var isEnd = TryGetBlock(blockCount);
+        if(isEnd == false)
+        {
+            action2?.Invoke();
+            yield break;
+        }
 
+        action1?.Invoke();
         // 떨어지기
         if(ApplyGravity())
             yield return waitGravity;

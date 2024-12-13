@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class ScoreUI : StaticUI
 {
-    [SerializeField] TMP_Text bestScoreLb = null;
-    [SerializeField] TMP_Text scoreLb = null;
+    [SerializeField] Text bestScoreLb = null;
+    [SerializeField] Text scoreLb = null;
 
     int curScore = 0;
     protected override List<GameEventType> EventTypeList => new List<GameEventType>()
@@ -54,6 +54,6 @@ public class ScoreUI : StaticUI
             PlayerPrefs.SetInt("PUZZLE_BEST_SCORE", curScore);
             bestScore = curScore;
         }
-        bestScoreLb.text = $"BestScore : {bestScore}";
+        bestScoreLb.text = $"{bestScore}";
     }
 }

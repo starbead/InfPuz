@@ -151,6 +151,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 8bafb1c3bd792400da94c1613e4833aa, type: 3}
   - {fileID: 21300000, guid: 8e7edf82e5c274c7994f1bafe146717b, type: 3}
   - {fileID: 21300000, guid: 509af2ff8e88f44f488e0f0092cce02c, type: 3}
+  effects:
+  - {fileID: 0}
+  - {fileID: 6546967712762174496, guid: b5ab24902eae4c242b842f87413509af, type: 3}
+  - {fileID: 1961222611141709394, guid: 7c826efcaedaa476084cef4cafe41fc3, type: 3}
+  - {fileID: 5431553225299669468, guid: 91ebeeefcc9a44179969546b784c155f, type: 3}
+  - {fileID: 4868518139389181529, guid: d5195ad5bf6934764b4101e3fc92215b, type: 3}
   _animator: {fileID: 95260198163426774}
 --- !u!95 &95260198163426774
 Animator:
