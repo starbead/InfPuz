@@ -11,31 +11,49 @@ public class Blocks : MonoBehaviour
     [Space(5)]
     [SerializeField] Animator _animator = null;
 
-    bool _isUse = false;
-    int xIndex = 0;
-    int yIndex = 0;
-
+    int xIndex = -1;
+    int yIndex = -1;
+    float speed = 0.3f;
     public void SetBlock(int x, int y, int blockNum)
     {
-        gameObject.SetActive(true);
         if (InGameManager.instance != null)
-            this.gameObject.transform.localPosition = InGameManager.instance.GetPos(x, y);
-
-        _isUse = true;
+            this.transform.localPosition = InGameManager.instance.GetPos(x, y);
         xIndex = x;
         yIndex = y;
         icon.sprite = iconList[blockNum];
     }
+    public void SetDummy(int blockNum)
+    {
+        _animator.enabled = false;
+        xIndex = -1;
+        yIndex = -1;
+        icon.sprite = iconList[blockNum];
+
+        Color c = icon.color;
+        c.a = 0.7f;
+        icon.color = c;
+    }
     public void Explode()
     {
+        // Æø¹ß ¿¬Ãâ
         HideBlock();
     }
     public void HideBlock()
     {
-        _isUse = false;
         icon.sprite = iconList[0];
-        gameObject.SetActive(false);
     }
+    public void FallenAni(int x, int y)
+    {
+        xIndex = x;
+        yIndex = y;
 
-    public bool IsUse => _isUse;
+        var tween = LeanTween.move(this.gameObject, InGameManager.instance.GetPos(x, y), speed);
+        tween.setEase(LeanTweenType.easeInQuad);
+        tween.setOnComplete(() =>
+        {
+            _animator.SetTrigger("Falling");
+        });
+    }
+    public (int, int) GetIndex => (xIndex, yIndex);
+    public float MoveSpeed => speed;
 }

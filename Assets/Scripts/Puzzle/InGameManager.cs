@@ -27,16 +27,12 @@ public class InGameManager : MonoBehaviour
         return board.posList[x][y];
     }
 
-    bool canClick = true;
     void OnClick_Block(int index1, int index2)
     {
-        canClick = false;
-        
+        board.BreakBlock(index1, index2);
     }
     private void Update()
     {
-        if (canClick == false) return;
-
         if (Input.GetMouseButtonUp(0))
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -44,7 +40,7 @@ public class InGameManager : MonoBehaviour
 
             if (hit.collider != null && hit.transform.gameObject.tag == "Block")
             {
-                if (hit.transform.TryGetComponent<Block>(out var obj))
+                if (hit.transform.TryGetComponent<Blocks>(out var obj))
                     OnClick_Block(obj.GetIndex.Item1, obj.GetIndex.Item2);
             }
         }
