@@ -80,5 +80,7 @@ public class ModeHard : ModeBase, PuzzleMode
         if(ApplyGravity())
             yield return waitGravity;
         action1?.Invoke();
+
+        InGameManager.instance.SetClickStatus(true);
     }
 }

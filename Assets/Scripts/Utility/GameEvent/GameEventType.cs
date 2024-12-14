@@ -20,4 +20,9 @@ public enum GameEventType
     /// 게임 스코어 변경
     /// </summary>
     ChangeScore,
+
+    /// <summary>
+    /// 게임 종료
+    /// </summary>
+    GameEnd,
 }

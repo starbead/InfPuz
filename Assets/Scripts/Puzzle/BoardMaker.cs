@@ -26,7 +26,7 @@ public class BoardMaker : MonoBehaviour
     public List<List<Vector2>> posList { get; private set; }
 
     int row = 5;
-    int col = 7;
+    int col = 9;
     int curScore = 0;
     public void initData()
     {
@@ -51,7 +51,7 @@ public class BoardMaker : MonoBehaviour
     {
         posList = new List<List<Vector2>>();
         float xPos = -1.3f;
-        float yPos = -2f;
+        float yPos = -3.2f;
 
         for(int i = 0; i < col; i++)
         {
@@ -106,6 +106,11 @@ public class BoardMaker : MonoBehaviour
         mode.TryGetBlock(MAXBlock);
         Rendering_Block();
     }
+    void EndGame()
+    {
+        GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
+        GameEventSubject.SendGameEvent(GameEventType.GameEnd, curScore);
+    }
     public void Rendering_Block()
     {
         for(int i = 0; i < col; i++)
@@ -126,7 +131,7 @@ public class BoardMaker : MonoBehaviour
         blockList[index1][index2].Explode();
         curScore += 1;
         BreakBlock_Recursive(index1, index2, value);
-        StartCoroutine((mode as PuzzleMode).PlayEffect_Cor(MAXBlock, Rendering_Block, ReSetBlock));
+        StartCoroutine((mode as PuzzleMode).PlayEffect_Cor(MAXBlock, Rendering_Block, EndGame));
     }
     void BreakBlock_Recursive(int i, int j, int value)
     {

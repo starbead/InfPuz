@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainTitle : StaticUI
 {
-    [SerializeField] GameObject TapLb = null;
+    [SerializeField] GameObject TapObj = null;
 
     protected override List<GameEventType> EventTypeList => new List<GameEventType>()
     { GameEventType.InitializeProgress, GameEventType.InitializeFinish };
@@ -15,13 +16,18 @@ public class MainTitle : StaticUI
             case GameEventType.InitializeProgress:
                 break;
             case GameEventType.InitializeFinish:
-                TapLb.SetActive(true);
+                TapObj.SetActive(true);
                 break;
         }   
     }
 
     protected override void initChild(params object[] data)
     {
-        TapLb.SetActive(false);
+        TapObj.SetActive(true);
+    }
+
+    public void OnClick_Play()
+    {
+        SceneManager.LoadScene("Game");
     }
 }

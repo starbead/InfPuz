@@ -20,6 +20,7 @@ public class InGameManager : MonoBehaviour
     private void Start()
     {
         board.initData();
+        SetClickStatus(true);
     }
 
     public Vector2 GetPos(int x, int y)
@@ -29,11 +30,22 @@ public class InGameManager : MonoBehaviour
 
     void OnClick_Block(int index1, int index2)
     {
+        SetClickStatus(false);
         board.BreakBlock(index1, index2);
     }
+    public void ReSetStage()
+    {
+        board.ReSetBlock();
+        SetClickStatus(true);
+    }
+
+    bool canClick = false;
+    public void SetClickStatus(bool onoff) => canClick = onoff;
     private void Update()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (canClick == false) return;
+
+        if (Input.GetMouseButtonDown(0))
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
