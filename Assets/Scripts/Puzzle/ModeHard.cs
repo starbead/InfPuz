@@ -12,6 +12,8 @@ public class ModeHard : ModeBase, PuzzleMode
     {
         if (CheckFail()) return false;
 
+        if (InGameManager.instance.isCombo) return true;    // 콤보 중에는 블록추가x
+
         RandBlock(blockCount);
 
         return true;
@@ -51,7 +53,7 @@ public class ModeHard : ModeBase, PuzzleMode
         {
             var obj = Instantiate(origin);
             obj.transform.position = new Vector3(xPos, 2.5f, 0f);   // 2.8f is original
-            obj.SetDummy(0);
+            obj.initDummy();
             nextBlockList.Add(obj);
             xPos += 0.6f;
         }

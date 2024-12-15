@@ -25,4 +25,9 @@ public enum GameEventType
     /// 게임 종료
     /// </summary>
     GameEnd,
+
+    /// <summary>
+    /// 콤보 연출
+    /// </summary>
+    EffectCombo,
 }

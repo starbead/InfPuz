@@ -8,6 +8,7 @@ public class InGameManager : MonoBehaviour
 
     [SerializeField] BoardMaker board = null;
 
+    int comboCount = 0;
     private void Awake()
     {
         QualitySettings.vSyncCount = 0;
@@ -31,7 +32,14 @@ public class InGameManager : MonoBehaviour
     void OnClick_Block(int index1, int index2)
     {
         SetClickStatus(false);
-        board.BreakBlock(index1, index2);
+
+        var count = board.BreakBlock(index1, index2);
+        comboCount = count >= 3 ? comboCount + 1 : 0;
+        if (isCombo)
+        {
+            board.SetDummyBlock(true);
+            GameEventSubject.SendGameEvent(GameEventType.EffectCombo);
+        }
     }
     public void ReSetStage()
     {
@@ -52,9 +60,12 @@ public class InGameManager : MonoBehaviour
 
             if (hit.collider != null && hit.transform.gameObject.tag == "Block")
             {
-                if (hit.transform.TryGetComponent<Blocks>(out var obj))
+                if (hit.transform.TryGetComponent<Blocks>(out var obj) && obj.isBlock)
                     OnClick_Block(obj.GetIndex.Item1, obj.GetIndex.Item2);
             }
         }
     }
+
+    public bool isCombo => comboCount >= 3;
+    public void ReSetCombo() => comboCount = 0;
 }

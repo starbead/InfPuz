@@ -7,6 +7,7 @@ public class Blocks : MonoBehaviour
     [Header("UI"), Space(5)]
     [SerializeField] SpriteRenderer icon = null;
     [SerializeField] Sprite[] iconList = null;
+    [SerializeField] SpriteRenderer iceIcon = null;
 
     [Space(5)]
     [SerializeField] ParticleEffect[] effects = null;
@@ -18,6 +19,7 @@ public class Blocks : MonoBehaviour
     int curIdx = -1;
     public void SetBlock(int x, int y, int blockNum)
     {
+        SetEnableIce(false);
         this.gameObject.SetActive(true);
         if (InGameManager.instance != null)
             this.transform.localPosition = InGameManager.instance.GetPos(x, y);
@@ -28,15 +30,28 @@ public class Blocks : MonoBehaviour
     }
     public void SetDummy(int blockNum)
     {
-        this.gameObject.SetActive(true);
         _animator.enabled = false;
         xIndex = -1;
         yIndex = -1;
         icon.sprite = iconList[blockNum];
-
+    }
+    public void initDummy()
+    {
+        this.gameObject.SetActive(true);
         Color c = icon.color;
         c.a = 0.7f;
         icon.color = c;
+
+        iceIcon.SetActive(false);
+        Color c2 = iceIcon.color;
+        c2.a = 0.7f;
+        iceIcon.color = c2;
+
+        SetDummy(0);
+    }
+    public void SetEnableIce(bool onoff)
+    {
+        iceIcon.SetActive(onoff);
     }
     public void Explode()
     {
@@ -66,5 +81,5 @@ public class Blocks : MonoBehaviour
     }
     public (int, int) GetIndex => (xIndex, yIndex);
     public float MoveSpeed => speed;
-
+    public bool isBlock => curIdx > 0;
 }

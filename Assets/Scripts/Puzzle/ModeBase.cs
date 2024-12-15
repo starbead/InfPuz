@@ -51,7 +51,7 @@ public class ModeBase : MonoBehaviour
         {
             var obj = Instantiate(origin);
             obj.transform.position = new Vector3(xPos, -2.75f, 0f); // -2.69f is original
-            obj.SetDummy(0);
+            obj.initDummy();
             nextBlockList.Add(obj);
             xPos += 0.6f;
         }
