@@ -34,7 +34,7 @@ public class LosePopup : StaticUI
     }
     public void OnClick_ReStart()
     {
-        InGameManager.instance.ReSetStage();
+        InGameManager.Instance.ReSetStage();
         gameObject.SetActive(false);
     }
 }

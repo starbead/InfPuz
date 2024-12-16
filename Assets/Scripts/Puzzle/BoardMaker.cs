@@ -159,7 +159,7 @@ public class BoardMaker : MonoBehaviour
             if (sum == 0)
             {
                 SetDummyBlock(false);
-                InGameManager.instance.ReSetCombo();
+                InGameManager.Instance.ReSetCombo();
             }
         }
     }

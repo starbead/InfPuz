@@ -11,7 +11,7 @@ public class ModeHard : ModeBase, PuzzleMode
     public override bool TryGetBlock(int blockCount)
     {
         var fail = CheckFail();
-        var comboing = InGameManager.instance.isCombo;
+        var comboing = InGameManager.Instance.isCombo;
 
         if (fail && comboing == false) return false;
         else
@@ -88,6 +88,6 @@ public class ModeHard : ModeBase, PuzzleMode
             yield return waitGravity;
         action1?.Invoke();
 
-        InGameManager.instance.SetClickStatus(true);
+        InGameManager.Instance.SetClickStatus(true);
     }
 }

@@ -10,11 +10,11 @@ public class ExitPopup : BaseUI
     }
     protected override void initChild(params object[] data)
     {
-        InGameManager.instance.SetClickStatus(false);
+        InGameManager.Instance.SetClickStatus(false);
     }
     public void OnClick_Close()
     {
-        InGameManager.instance.SetClickStatus(true);
+        InGameManager.Instance.SetClickStatus(true);
         EndPanel();
     }
     public void OnClick_Exit()

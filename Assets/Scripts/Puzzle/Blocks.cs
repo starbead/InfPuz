@@ -21,8 +21,8 @@ public class Blocks : MonoBehaviour
     {
         SetEnableIce(false);
         this.gameObject.SetActive(true);
-        if (InGameManager.instance != null)
-            this.transform.localPosition = InGameManager.instance.GetPos(x, y);
+        if (InGameManager.Instance != null)
+            this.transform.localPosition = InGameManager.Instance.GetPos(x, y);
         xIndex = x;
         yIndex = y;
         curIdx = blockNum;
@@ -59,7 +59,7 @@ public class Blocks : MonoBehaviour
         if (curIdx == 0) return;
         // Æø¹ß ¿¬Ãâ
         var obj = Instantiate(effects[curIdx]);
-        obj.transform.position = InGameManager.instance.GetPos(xIndex, yIndex);
+        obj.transform.position = InGameManager.Instance.GetPos(xIndex, yIndex);
         HideBlock();
     }
     public void HideBlock()
@@ -74,7 +74,7 @@ public class Blocks : MonoBehaviour
         xIndex = x;
         yIndex = y;
 
-        var tween = LeanTween.move(this.gameObject, InGameManager.instance.GetPos(x, y), speed);
+        var tween = LeanTween.move(this.gameObject, InGameManager.Instance.GetPos(x, y), speed);
         tween.setEase(LeanTweenType.easeInQuad);
         tween.setOnComplete(() =>
         {

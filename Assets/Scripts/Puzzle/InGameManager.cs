@@ -2,26 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InGameManager : MonoBehaviour
+public class InGameManager : MonoSingleton<InGameManager>
 {
-    public static InGameManager instance = null;
-
     [SerializeField] BoardMaker board = null;
 
     int comboCount = 0;
-    private void Awake()
+    protected override void ChildAwake()
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
 
-        if (instance == null)
-            instance = this;
-    }
-
-    private void Start()
-    {
         board.initData();
         SetClickStatus(true);
+    }
+    protected override void ChildOnDestroy()
+    {
+        
     }
 
     public Vector2 GetPos(int x, int y)
