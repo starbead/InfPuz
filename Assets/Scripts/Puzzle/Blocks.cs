@@ -67,6 +67,7 @@ public class Blocks : MonoBehaviour
         curIdx = 0;
         icon.sprite = iconList[0];
         this.gameObject.SetActive(false);
+        SetEnableIce(false);
     }
     public void FallenAni(int x, int y)
     {

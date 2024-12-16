@@ -43,6 +43,7 @@ public class InGameManager : MonoBehaviour
     }
     public void ReSetStage()
     {
+        comboCount = 0;
         board.ReSetBlock();
         SetClickStatus(true);
     }

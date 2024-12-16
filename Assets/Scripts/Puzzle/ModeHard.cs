@@ -10,9 +10,14 @@ public class ModeHard : ModeBase, PuzzleMode
 
     public override bool TryGetBlock(int blockCount)
     {
-        if (CheckFail()) return false;
+        var fail = CheckFail();
+        var comboing = InGameManager.instance.isCombo;
 
-        if (InGameManager.instance.isCombo) return true;    // 콤보 중에는 블록추가x
+        if (fail && comboing == false) return false;
+        else
+        {
+            if (comboing) return true;
+        }
 
         RandBlock(blockCount);
 
