@@ -31,6 +31,7 @@ public class Blocks : MonoBehaviour
     public void SetDummy(int blockNum)
     {
         _animator.enabled = false;
+        this.gameObject.SetActive(true);
         xIndex = -1;
         yIndex = -1;
         icon.sprite = iconList[blockNum];

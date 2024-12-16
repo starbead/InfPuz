@@ -30,4 +30,8 @@ public class MainTitle : StaticUI
     {
         SceneManager.LoadScene("Game");
     }
+    public void OnClick_Help()
+    {
+        UIManager.instance.ShowUI(App.Enum.DynamicUI.HelpPopup);
+    }
 }

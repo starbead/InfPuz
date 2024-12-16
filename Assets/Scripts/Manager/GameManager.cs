@@ -47,16 +47,11 @@ public class GameManager : MonoSingleton<GameManager>
     {
         mainThreadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
         GameEventSubject.CheckQueueingEvent();
-#if INTERNAL_TEST
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.UpArrow))
-            CheatAddDay++;
-        else if (Input.GetKey(KeyCode.RightShift) && Input.GetKeyDown(KeyCode.UpArrow))
-            CheatAddDay += 5;
-#endif
 
 #if !UNITY_IOS
         if ((Time.realtimeSinceStartup - delayTime) > 1f && Input.GetKey(KeyCode.Escape))
         {
+            UIManager.instance.ShowUI(App.Enum.DynamicUI.ExitPopup);
             delayTime = Time.realtimeSinceStartup;
         }
 #endif
