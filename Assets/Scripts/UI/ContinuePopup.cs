@@ -18,10 +18,12 @@ public class ContinuePopup : BaseUI
     {
         PlayerPrefs.SetInt(Common.GetPlayerPrefs(App.Enum.LocalData.LOADSAVE), 1);
         SceneManager.LoadScene("Game");
+        EndPanel();
     }
     public void OnClick_NewGame()
     {
         PlayerPrefs.SetInt(Common.GetPlayerPrefs(App.Enum.LocalData.LOADSAVE), 0);
         SceneManager.LoadScene("Game");
+        EndPanel();
     }
 }

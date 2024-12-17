@@ -15,10 +15,8 @@ public class BoardMaker : MonoBehaviour
     [SerializeField] GameObject originTile = null;
     [SerializeField] Blocks originBlock = null;
 
-    int[,] board = null;
     List<List<Blocks>> blockList = null;
 
-    int[] nextBoard = null;
     List<Blocks> nextBlockList = null;
 
     ModeBase mode;
@@ -27,29 +25,28 @@ public class BoardMaker : MonoBehaviour
 
     int row = 5;
     int col = 9;
-    int curScore = 0;
     int breakCount = 0;
-    public void initData()
+    public PuzzleData puzzledata = null;
+    public void initData(PuzzleData data)
     {
-        curScore = 0;
-        board = new int[col, row];
+        puzzledata = data;
+        row = data.row;
+        col = data.col;
         blockList = new List<List<Blocks>>();
-
-        nextBoard = new int[row];
         nextBlockList = new List<Blocks>();
 
-        mode = new ModeHard(board, blockList);
+        mode = new ModeHard(puzzledata.board, blockList);
 
         initSetting();
 
         if (PlayerPrefs.GetInt(Common.GetPlayerPrefs(App.Enum.LocalData.LOADSAVE), 0) == 1)
             LoadGame();
 
-        mode.initNextBlock(nextBoard, nextBlockList, originBlock);
+        mode.initNextBlock(puzzledata.nextBoard, nextBlockList, originBlock);
         mode.TryGetBlock(MAXBlock);
         Rendering_Block();
 
-        GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
+        GameEventSubject.SendGameEvent(GameEventType.ChangeScore, puzzledata.curScore);
     }
     
     public void LoadGame()
@@ -92,16 +89,11 @@ public class BoardMaker : MonoBehaviour
     }
     public void ReSetBlock()
     {
-        curScore = 0;
-        GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
+        puzzledata.ResetData();
 
-        for (int i = 0; i < col; i++)
-        {
-            for (int j = 0; j < row; j++)
-                board[i, j] = 0;
-        }
+        GameEventSubject.SendGameEvent(GameEventType.ChangeScore, puzzledata.curScore);
 
-        foreach(var blocks in blockList)
+        foreach (var blocks in blockList)
         {
             foreach(var block in blocks)
                 block.HideBlock();
@@ -109,7 +101,6 @@ public class BoardMaker : MonoBehaviour
 
         for(int i = 0; i < row; i++)
         {
-            nextBoard[i] = 0;
             nextBlockList[i].HideBlock();
         }
 
@@ -118,29 +109,29 @@ public class BoardMaker : MonoBehaviour
     }
     void EndGame()
     {
-        GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
-        GameEventSubject.SendGameEvent(GameEventType.GameEnd, curScore);
+        GameEventSubject.SendGameEvent(GameEventType.ChangeScore, puzzledata.curScore);
+        GameEventSubject.SendGameEvent(GameEventType.GameEnd, puzzledata.curScore);
     }
     public void Rendering_Block()
     {
         for(int i = 0; i < col; i++)
         {
             for (int j = 0; j < row; j++)
-                blockList[i][j].SetBlock(i, j, board[i, j]);
+                blockList[i][j].SetBlock(i, j, puzzledata.board[i, j]);
         }
 
         for (int i = 0; i < nextBlockList.Count; i++)
-            nextBlockList[i].SetDummy(nextBoard[i]);
+            nextBlockList[i].SetDummy(puzzledata.nextBoard[i]);
 
-        GameEventSubject.SendGameEvent(GameEventType.ChangeScore, curScore);
+        GameEventSubject.SendGameEvent(GameEventType.ChangeScore, puzzledata.curScore);
     }
     public int BreakBlock(int index1, int index2)
     {
         breakCount = 1;
-        var value = board[index1, index2];
-        board[index1, index2] = 0;
+        var value = puzzledata.board[index1, index2];
+        puzzledata.board[index1, index2] = 0;
         blockList[index1][index2].Explode();
-        curScore += 1;
+        puzzledata.AddSocre(1);
         BreakBlock_Recursive(index1, index2, value);
         CheckCombo();
         StartCoroutine((mode as PuzzleMode).PlayEffect_Cor(MAXBlock, Rendering_Block, EndGame));
@@ -162,13 +153,13 @@ public class BoardMaker : MonoBehaviour
             {
                 for(int j = 0; j < row; j++)
                 {
-                    sum += board[i, j];
+                    sum += puzzledata.board[i, j];
                 }
             }
             if (sum == 0)
             {
                 SetDummyBlock(false);
-                InGameManager.Instance.ReSetCombo();
+                puzzledata.ReSetCombo();
             }
         }
     }
@@ -176,41 +167,41 @@ public class BoardMaker : MonoBehaviour
     {
         if (value == 0) return;
         // 좌측
-        if (j > 0 && board[i, j - 1] == value)
+        if (j > 0 && puzzledata.board[i, j - 1] == value)
         {
-            board[i, j - 1] = 0;
+            puzzledata.board[i, j - 1] = 0;
             blockList[i][j - 1].Explode();
-            curScore += 1;
+            puzzledata.AddSocre(1);
             breakCount += 1;
             BreakBlock_Recursive(i, j - 1, value);
         }
 
         // 우측
-        if (j < row - 1 && board[i, j + 1] == value)
+        if (j < row - 1 && puzzledata.board[i, j + 1] == value)
         {
-            board[i, j + 1] = 0;
+            puzzledata.board[i, j + 1] = 0;
             blockList[i][j + 1].Explode();
-            curScore += 1;
+            puzzledata.AddSocre(1);
             breakCount += 1;
             BreakBlock_Recursive(i, j + 1, value);
         }
 
         // 상단
-        if (i > 0 && board[i - 1, j] == value)
+        if (i > 0 && puzzledata.board[i - 1, j] == value)
         {
-            board[i - 1, j] = 0;
+            puzzledata.board[i - 1, j] = 0;
             blockList[i - 1][j].Explode();
-            curScore += 1;
+            puzzledata.AddSocre(1);
             breakCount += 1;
             BreakBlock_Recursive(i - 1, j, value);
         }
 
         // 하단
-        if (i < col - 1 && board[i + 1, j] == value)
+        if (i < col - 1 && puzzledata.board[i + 1, j] == value)
         {
-            board[i + 1, j] = 0;
+            puzzledata.board[i + 1, j] = 0;
             blockList[i + 1][j].Explode();
-            curScore += 1;
+            puzzledata.AddSocre(1);
             breakCount += 1;
             BreakBlock_Recursive(i + 1, j, value);
         }

@@ -1,18 +1,28 @@
+using App.Enum;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 public class InGameManager : MonoSingleton<InGameManager>
 {
+    const string fileName = "SaveData.json";
     [SerializeField] BoardMaker board = null;
 
+    PuzzleData puzzleData = null;
     int comboCount = 0;
     protected override void ChildAwake()
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
 
-        board.initData();
+        if (PlayerPrefs.GetInt(Common.GetPlayerPrefs(App.Enum.LocalData.LOADSAVE), 0) == 0)
+            puzzleData = new PuzzleData();
+        else
+            LoadData();
+
+        board.initData(puzzleData);
         SetClickStatus(true);
     }
     protected override void ChildOnDestroy()
@@ -28,10 +38,11 @@ public class InGameManager : MonoSingleton<InGameManager>
     void OnClick_Block(int index1, int index2)
     {
         SetClickStatus(false);
-
+        
         var count = board.BreakBlock(index1, index2);
-        comboCount = count >= 3 ? comboCount + 1 : 0;
-        if (isCombo)
+        
+        puzzleData.comboCount = count >= 3 ? puzzleData.comboCount + 1 : 0;
+        if (puzzleData.isCombo)
         {
             board.SetDummyBlock(true);
             GameEventSubject.SendGameEvent(GameEventType.EffectCombo);
@@ -39,9 +50,28 @@ public class InGameManager : MonoSingleton<InGameManager>
     }
     public void ReSetStage()
     {
-        comboCount = 0;
         board.ReSetBlock();
         SetClickStatus(true);
+    }
+    public void SaveData()
+    {
+        PlayerPrefs.SetInt(Common.GetPlayerPrefs(App.Enum.LocalData.LOADSAVE), 1);
+        string filePath = Application.persistentDataPath + "/" + fileName;
+        //string jsonStr = JsonUtility.ToJson(puzzleData);
+        string jsonStr = NJson.Encode(puzzleData);
+        System.IO.File.WriteAllText(filePath, jsonStr);
+    }
+    public void LoadData()
+    {
+        string filePath = Application.persistentDataPath + "/" + fileName;
+
+        if (System.IO.File.Exists(filePath) == false) return;
+
+        string fileStr = System.IO.File.ReadAllText(filePath);
+        //var data = JsonUtility.FromJson<PuzzleData>(fileStr);
+        var data = NJson.Decode<PuzzleData>(fileStr);
+        if (data != null)
+            puzzleData = data;
     }
 
     bool canClick = false;
@@ -63,6 +93,5 @@ public class InGameManager : MonoSingleton<InGameManager>
         }
     }
 
-    public bool isCombo => comboCount >= 3;
-    public void ReSetCombo() => comboCount = 0;
+    public bool isCombo => puzzleData.comboCount >= 3;
 }

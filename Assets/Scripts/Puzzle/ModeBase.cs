@@ -12,6 +12,7 @@ public class ModeBase : MonoBehaviour
     protected int[] nextBoard = null;
 
     protected WaitForSeconds waitGravity = null;
+    
     public ModeBase(int[,] board, List<List<Blocks>> blockList)
     {
         this.board = board;
