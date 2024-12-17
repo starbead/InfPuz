@@ -42,16 +42,18 @@ public class ScoreUI : StaticUI
     void CheckBestScore()
     {
         int bestScore = 0;
-        if (PlayerPrefs.HasKey("PUZZLE_BEST_SCORE") == false)
-            PlayerPrefs.SetInt("PUZZLE_BEST_SCORE", 0);
+        string localData = Common.GetPlayerPrefs(App.Enum.LocalData.BESTSCORE);
+
+        if (PlayerPrefs.HasKey(localData) == false)
+            PlayerPrefs.SetInt(localData, 0);
         else
         {
-            bestScore = PlayerPrefs.GetInt("PUZZLE_BEST_SCORE");
+            bestScore = PlayerPrefs.GetInt(localData);
         }
 
         if(curScore > bestScore)
         {
-            PlayerPrefs.SetInt("PUZZLE_BEST_SCORE", curScore);
+            PlayerPrefs.SetInt(localData, curScore);
             bestScore = curScore;
         }
         bestScoreLb.text = $"{bestScore}";

@@ -28,7 +28,11 @@ public class MainTitle : StaticUI
 
     public void OnClick_Play()
     {
-        SceneManager.LoadScene("Game");
+        var value = PlayerPrefs.GetInt(Common.GetPlayerPrefs(App.Enum.LocalData.LOADSAVE), 0);
+        if(value == 0)
+            SceneManager.LoadScene("Game");
+        else
+            UIManager.instance.ShowUI(App.Enum.DynamicUI.ContinuePopup);
     }
     public void OnClick_Help()
     {

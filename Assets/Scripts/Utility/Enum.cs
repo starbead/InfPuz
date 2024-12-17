@@ -20,6 +20,13 @@ namespace App.Enum
         NONE,
         ExitPopup,
         HelpPopup,
+        ContinuePopup,
+    }
+    public enum LocalData
+    {
+        NONE,
+        BESTSCORE,
+        LOADSAVE,
     }
 }
 
@@ -33,6 +40,19 @@ public static class Common
                 return "Prefabs/Popups/ExitPopup";
             case DynamicUI.HelpPopup:
                 return "Prefabs/Popups/HelpPopup";
+            case DynamicUI.ContinuePopup:
+                return "Prefabs/Popups/ContinuePopup";
+        }
+        return "";
+    }
+    public static string GetPlayerPrefs(LocalData code)
+    {
+        switch(code)
+        {
+            case LocalData.BESTSCORE:
+                return "PUZZLE_BEST_SCORE";
+            case LocalData.LOADSAVE:
+                return "PUZZLE_LOAD_SAVEDATA";
         }
         return "";
     }
