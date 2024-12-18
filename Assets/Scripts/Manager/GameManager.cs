@@ -17,6 +17,8 @@ public class GameManager : MonoSingleton<GameManager>
 {
     //[SerializeField] private Camera Camera = null;
     [SerializeField] public Excel.LanguageList CustomLanguage = Excel.LanguageList.KO;
+
+    public AdManager adManager = null;
     public static SceneList Mode { get; private set; }
 
     public bool IsMainThreadNow()

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class ScoreUI : StaticUI
@@ -29,9 +30,12 @@ public class ScoreUI : StaticUI
 
     protected override void initChild(params object[] data)
     {
-        ChangeScore(0);
+        ChangeScore(InGameManager.Instance.LoadScore);
     }
-
+    void SetScore()
+    {
+        scoreLb.text = $"{curScore}";
+    }
     void ChangeScore(int score)
     {
         scoreLb.text = $"{score}";

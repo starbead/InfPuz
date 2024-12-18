@@ -7,6 +7,7 @@ public class LosePopup : StaticUI
 {
     [SerializeField] Text ScoreLb = null;
 
+    float delayButtonTimer = 1f;
     protected override List<GameEventType> EventTypeList => new List<GameEventType>()
     {
         GameEventType.GameEnd,
@@ -18,8 +19,11 @@ public class LosePopup : StaticUI
             case GameEventType.GameEnd:
                 {
                     gameObject.SetActive(true);
+                    delayButtonTimer = 1f;
                     var score = e.ReadInt;
                     SetGameScore(score);
+                    InGameManager.Instance.DeleteData();
+                    GameManager.Instance.adManager.ShowInterstitialAd();
                 }
                 break;
         }
@@ -34,7 +38,16 @@ public class LosePopup : StaticUI
     }
     public void OnClick_ReStart()
     {
+        if (delayButtonTimer > 0) return;
         InGameManager.Instance.ReSetStage();
         gameObject.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if(delayButtonTimer > 0)
+        {
+            delayButtonTimer -= Time.deltaTime;
+        }
     }
 }

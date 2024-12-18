@@ -13,7 +13,9 @@ public class HelpPopup : BaseUI
     }
     protected override void initChild(params object[] data)
     {
-        for(int i = 0; i < control_img.Length; i++)
+        InGameManager.Instance.SetClickStatus(false);
+
+        for (int i = 0; i < control_img.Length; i++)
         {
             LeanTween.alpha(control_img[i].rectTransform, 0f, 1f).setLoopPingPong();
         }
@@ -21,5 +23,6 @@ public class HelpPopup : BaseUI
     public void OnClick_Close()
     {
         EndPanel();
+        InGameManager.Instance.SetClickStatus(true);
     }
 }

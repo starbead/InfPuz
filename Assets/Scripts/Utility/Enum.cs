@@ -21,12 +21,15 @@ namespace App.Enum
         ExitPopup,
         HelpPopup,
         ContinuePopup,
+        SettingPopup,
     }
     public enum LocalData
     {
         NONE,
         BESTSCORE,
         LOADSAVE,
+        EffectSound,
+        BGMSound,
     }
 }
 
@@ -42,6 +45,8 @@ public static class Common
                 return "Prefabs/Popups/HelpPopup";
             case DynamicUI.ContinuePopup:
                 return "Prefabs/Popups/ContinuePopup";
+            case DynamicUI.SettingPopup:
+                return "Prefabs/Popups/SettingsPopup";
         }
         return "";
     }
@@ -53,6 +58,10 @@ public static class Common
                 return "PUZZLE_BEST_SCORE";
             case LocalData.LOADSAVE:
                 return "PUZZLE_LOAD_SAVEDATA";
+            case LocalData.EffectSound:
+                return "PUZZLE_EFFECTSOUND";
+            case LocalData.BGMSound:
+                return "PUZZLE_BGMSOUND";
         }
         return "";
     }

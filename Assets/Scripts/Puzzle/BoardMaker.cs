@@ -27,7 +27,7 @@ public class BoardMaker : MonoBehaviour
     int col = 9;
     int breakCount = 0;
     public PuzzleData puzzledata = null;
-    public void initData(PuzzleData data)
+    public void initData(PuzzleData data, bool isLoadData)
     {
         puzzledata = data;
         row = data.row;
@@ -38,22 +38,23 @@ public class BoardMaker : MonoBehaviour
         mode = new ModeHard(puzzledata.board, blockList);
 
         initSetting();
-
-        if (PlayerPrefs.GetInt(Common.GetPlayerPrefs(App.Enum.LocalData.LOADSAVE), 0) == 1)
-            LoadGame();
-
         mode.initNextBlock(puzzledata.nextBoard, nextBlockList, originBlock);
-        mode.TryGetBlock(MAXBlock);
+
+        if(isLoadData == false)
+            mode.TryGetBlock(MAXBlock);
+        else
+        {
+            if (puzzledata.isCombo)
+            {
+                SetDummyBlock(true);
+            }
+        }
+
         Rendering_Block();
 
         GameEventSubject.SendGameEvent(GameEventType.ChangeScore, puzzledata.curScore);
     }
     
-    public void LoadGame()
-    {
-
-    }
-
     void initSetting()
     {
         posList = new List<List<Vector2>>();
@@ -131,6 +132,7 @@ public class BoardMaker : MonoBehaviour
         var value = puzzledata.board[index1, index2];
         puzzledata.board[index1, index2] = 0;
         blockList[index1][index2].Explode();
+        SoundManager.Instance.PlayEffect("Sounds/Game/CubePress");
         puzzledata.AddSocre(1);
         BreakBlock_Recursive(index1, index2, value);
         CheckCombo();

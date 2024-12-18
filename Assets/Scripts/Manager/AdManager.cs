@@ -7,8 +7,13 @@ using Newtonsoft.Json.Linq;
 
 public class AdManager : MonoBehaviour
 {
+    // Àü¸é±¤°í
+    private InterstitialAd interstitial = null;
+    private string interstitial_adUnitID = "";
+
+    // ¹è³Ê±¤°í
     private BannerView bannerView = null;
-    private string adUnitID = "";
+    private string banner_adUnitID = "";
 
     private void Start()
     {
@@ -18,16 +23,64 @@ public class AdManager : MonoBehaviour
 
         });
         RequestBanner();
+        LoadInterstitial();
     }
+    void LoadInterstitial()
+    {
+#if UNITY_ANDROID
+        interstitial_adUnitID = "ca-app-pub-3940256099942544/1033173712";
+#elif UNITY_IPHONE
+        interstitial_adUnitID = "ca-app-pub-3940256099942544/4411468910";
+#else
+        interstitial_adUnitID = "unexpected_platform";
+#endif
 
+        if(interstitial != null)
+        {
+            interstitial.Destroy();
+            interstitial = null;
+        }
+
+        var adReuest = new AdRequest();
+        InterstitialAd.Load(interstitial_adUnitID, adReuest,
+            (InterstitialAd ad, LoadAdError error) =>
+            {
+                if (error != null || ad == null)
+                    return;
+                interstitial = ad;
+            });
+
+        interstitial.OnAdFullScreenContentClosed += () =>
+        {
+            LoadInterstitial();
+        };
+        interstitial.OnAdFullScreenContentFailed += (AdError error) =>
+        {
+            LoadInterstitial();
+        };
+    }
+    public void ShowInterstitialAd()
+    {
+        if (interstitial != null && interstitial.CanShowAd())
+            interstitial.Show();
+    }
+    // Not Use
+    void RegisterInterstitialEvent()
+    {
+        interstitial.OnAdPaid += (AdValue adValue) =>
+        {
+            
+        };
+    }
+    // Banner
     void RequestBanner()
     {
 #if UNITY_ANDROID
-        adUnitID = "ca-app-pub-3940256099942544/6300978111";
+        banner_adUnitID = "ca-app-pub-3940256099942544/6300978111";
 #elif UNITY_IPHONE
-        adUnitID = "ca-app-pub-3940256099942544/2934735716";
+        banner_adUnitID = "ca-app-pub-3940256099942544/2934735716";
 #else
-        adUnitID = "unexpected_platform";
+        banner_adUnitID = "unexpected_platform";
 #endif
 
         if (bannerView != null)
@@ -38,7 +91,7 @@ public class AdManager : MonoBehaviour
 
         //AdSize adaptiveSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
         //bannerView = new BannerView(adUnitID, adaptiveSize, AdPosition.Bottom);
-        bannerView = new BannerView(adUnitID, AdSize.Banner, AdPosition.Bottom);
+        bannerView = new BannerView(banner_adUnitID, AdSize.Banner, AdPosition.Bottom);
         
         bannerView.OnBannerAdLoaded += HandleOnAdLoaded;
         bannerView.OnBannerAdLoadFailed += HandleOnAdLoadFailed;

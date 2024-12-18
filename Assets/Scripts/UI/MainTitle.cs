@@ -24,18 +24,18 @@ public class MainTitle : StaticUI
     protected override void initChild(params object[] data)
     {
         TapObj.SetActive(true);
+        SoundManager.Instance.PlayBGM("Sounds/Bgm/Zachz_Winner-blu");
     }
 
     public void OnClick_Play()
     {
         var value = PlayerPrefs.GetInt(Common.GetPlayerPrefs(App.Enum.LocalData.LOADSAVE), 0);
         if(value == 0)
+        {
+            PlayerPrefs.SetInt(Common.GetPlayerPrefs(App.Enum.LocalData.LOADSAVE), 0);
             SceneManager.LoadScene("Game");
+        }
         else
             UIManager.instance.ShowUI(App.Enum.DynamicUI.ContinuePopup);
-    }
-    public void OnClick_Help()
-    {
-        UIManager.instance.ShowUI(App.Enum.DynamicUI.HelpPopup);
     }
 }

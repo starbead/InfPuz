@@ -5,29 +5,36 @@ using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
 
-public class InGameManager : MonoSingleton<InGameManager>
+public class InGameManager : MonoBehaviour
 {
+    public static InGameManager Instance = null;
+
     const string fileName = "SaveData.json";
     [SerializeField] BoardMaker board = null;
 
     PuzzleData puzzleData = null;
     int comboCount = 0;
-    protected override void ChildAwake()
+    private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
 
+        bool isLoadData = false;
         if (PlayerPrefs.GetInt(Common.GetPlayerPrefs(App.Enum.LocalData.LOADSAVE), 0) == 0)
+        {
             puzzleData = new PuzzleData();
+        }
         else
+        {
             LoadData();
+            isLoadData = true;
+        }
 
-        board.initData(puzzleData);
+        board.initData(puzzleData, isLoadData);
         SetClickStatus(true);
-    }
-    protected override void ChildOnDestroy()
-    {
-        
     }
 
     public Vector2 GetPos(int x, int y)
@@ -73,6 +80,10 @@ public class InGameManager : MonoSingleton<InGameManager>
         if (data != null)
             puzzleData = data;
     }
+    public void DeleteData()
+    {
+        PlayerPrefs.DeleteKey(Common.GetPlayerPrefs(App.Enum.LocalData.LOADSAVE));
+    }
 
     bool canClick = false;
     public void SetClickStatus(bool onoff) => canClick = onoff;
@@ -94,4 +105,5 @@ public class InGameManager : MonoSingleton<InGameManager>
     }
 
     public bool isCombo => puzzleData.comboCount >= 3;
+    public int LoadScore => puzzleData.curScore;
 }

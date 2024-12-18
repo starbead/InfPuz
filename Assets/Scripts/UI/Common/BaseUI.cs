@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 public class BaseUI : MonoBehaviour
@@ -8,11 +9,15 @@ public class BaseUI : MonoBehaviour
     public Action onFinished = null;
     public App.Enum.DynamicUI uiType { get; private set; } = App.Enum.DynamicUI.NONE;
     protected virtual List<GameEventType> EventTypeList { get; } = new List<GameEventType>();
-    
+
+    private void Start()
+    {
+        SetButtonSound();
+    }
     public void Init(params object[] data)
     {
         this.gameObject.SetActive(true);
-
+        
         foreach (var e in EventTypeList)
             GameEventSubject.RegisterHandler(e, HandleGameEvent);
 
@@ -42,5 +47,19 @@ public class BaseUI : MonoBehaviour
     private void OnDestroy()
     {
         ClearObj();
+    }
+
+    void SetButtonSound()
+    {
+        var buttons = FindObjectsOfType<Button>();
+        foreach(var button in buttons)
+        {
+            button.onClick.RemoveListener(PlayButtonSound);
+            button.onClick.AddListener(PlayButtonSound);
+        }
+    }
+    void PlayButtonSound()
+    {
+        SoundManager.Instance.PlayEffect("Sounds/UI/Button");
     }
 }
