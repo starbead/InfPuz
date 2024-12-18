@@ -28,14 +28,15 @@ public class AdManager : MonoBehaviour
     void LoadInterstitial()
     {
 #if UNITY_ANDROID
-        interstitial_adUnitID = "ca-app-pub-3940256099942544/1033173712";
+        interstitial_adUnitID = "ca-app-pub-8592016599659735/3307603504";
+        //interstitial_adUnitID = "ca-app-pub-3940256099942544/1033173712"; // TEST
 #elif UNITY_IPHONE
         interstitial_adUnitID = "ca-app-pub-3940256099942544/4411468910";
 #else
         interstitial_adUnitID = "unexpected_platform";
 #endif
 
-        if(interstitial != null)
+        if (interstitial != null)
         {
             interstitial.Destroy();
             interstitial = null;
@@ -76,7 +77,8 @@ public class AdManager : MonoBehaviour
     void RequestBanner()
     {
 #if UNITY_ANDROID
-        banner_adUnitID = "ca-app-pub-3940256099942544/6300978111";
+        banner_adUnitID = "ca-app-pub-8592016599659735/3040010198";
+        //banner_adUnitID = "ca-app-pub-3940256099942544/6300978111";   // TEST
 #elif UNITY_IPHONE
         banner_adUnitID = "ca-app-pub-3940256099942544/2934735716";
 #else
