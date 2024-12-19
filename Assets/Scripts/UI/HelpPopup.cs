@@ -13,7 +13,15 @@ public class HelpPopup : BaseUI
     }
     protected override void initChild(params object[] data)
     {
-        InGameManager.Instance.SetClickStatus(false);
+        if(InGameManager.Instance != null)
+            InGameManager.Instance.SetClickStatus(false);
+
+        foreach(var item in control_img)
+        {
+            var c = item.color;
+            c.a = 1f;
+            item.color = c;
+        }
 
         for (int i = 0; i < control_img.Length; i++)
         {
@@ -23,6 +31,7 @@ public class HelpPopup : BaseUI
     public void OnClick_Close()
     {
         EndPanel();
-        InGameManager.Instance.SetClickStatus(true);
+        if (InGameManager.Instance != null)
+            InGameManager.Instance.SetClickStatus(true);
     }
 }

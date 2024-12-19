@@ -15,7 +15,8 @@ public class SettingPopup : BaseUI
     protected override void initChild(params object[] data)
     {
         initData();
-        InGameManager.Instance.SetClickStatus(false);
+        if (InGameManager.Instance != null)
+            InGameManager.Instance.SetClickStatus(false);
     }
     void initData()
     {
@@ -35,6 +36,8 @@ public class SettingPopup : BaseUI
     public void OnClick_Close()
     {
         EndPanel();
-        InGameManager.Instance.SetClickStatus(true);
+
+        if (InGameManager.Instance != null)
+            InGameManager.Instance.SetClickStatus(true);
     }
 }
