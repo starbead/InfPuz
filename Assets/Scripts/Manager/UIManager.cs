@@ -33,5 +33,4 @@ public class UIManager : MonoBehaviour
                 UIList[idx].Init(data);
         }
     }
-    
 }

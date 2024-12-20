@@ -64,7 +64,6 @@ public class InGameManager : MonoBehaviour
     {
         PlayerPrefs.SetInt(Common.GetPlayerPrefs(App.Enum.LocalData.LOADSAVE), 1);
         string filePath = Application.persistentDataPath + "/" + fileName;
-        //string jsonStr = JsonUtility.ToJson(puzzleData);
         string jsonStr = NJson.Encode(puzzleData);
         System.IO.File.WriteAllText(filePath, jsonStr);
     }
@@ -75,7 +74,6 @@ public class InGameManager : MonoBehaviour
         if (System.IO.File.Exists(filePath) == false) return;
 
         string fileStr = System.IO.File.ReadAllText(filePath);
-        //var data = JsonUtility.FromJson<PuzzleData>(fileStr);
         var data = NJson.Decode<PuzzleData>(fileStr);
         if (data != null)
             puzzleData = data;
