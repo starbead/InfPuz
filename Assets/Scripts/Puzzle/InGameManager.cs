@@ -82,9 +82,22 @@ public class InGameManager : MonoBehaviour
     {
         PlayerPrefs.DeleteKey(Common.GetPlayerPrefs(App.Enum.LocalData.LOADSAVE));
     }
-
+    Stack<int> ClickStack = new Stack<int>();
     bool canClick = false;
-    public void SetClickStatus(bool onoff) => canClick = onoff;
+    public void SetClickStatus(bool onoff)
+    {
+        if (onoff)
+        {
+            if (ClickStack.Count > 0)
+                ClickStack.Pop();
+        }
+        else
+        {
+            ClickStack.Push(0);
+        }
+
+        canClick = ClickStack.Count == 0;
+    }
     private void Update()
     {
         if (canClick == false) return;

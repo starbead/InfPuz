@@ -59,9 +59,12 @@ public class GameManager : MonoSingleton<GameManager>
 #endif
     }
 
-    public void LoadScene(SceneList name)
+    private void OnApplicationQuit()
     {
-
+        Application.CancelQuit();
+#if !UNITY_EDITOR
+        System.Diagnostics.Process.GetCurrentProcess().Kill();
+#endif
     }
 
     static public long GetParse_Long(object objData)

@@ -25,12 +25,16 @@ public class UIManager : MonoBehaviour
             var obj = Instantiate(UIObj, popupCanvas.gameObject.transform);
             obj.Init(data);
             obj.SetEnumData(ui);
+            obj.transform.SetAsLastSibling();
             UIList.Add(obj);
         }
         else
         {
             if (UIList[idx].gameObject.activeInHierarchy == false)
+            {
                 UIList[idx].Init(data);
+                UIList[idx].transform.SetAsLastSibling();
+            }
         }
     }
 }
