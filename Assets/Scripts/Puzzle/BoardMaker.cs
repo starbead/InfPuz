@@ -93,6 +93,7 @@ public class BoardMaker : MonoBehaviour
         puzzledata.ResetData();
 
         GameEventSubject.SendGameEvent(GameEventType.ChangeScore, puzzledata.curScore);
+        GameEventSubject.SendGameEvent(GameEventType.ChangeCombo, puzzledata.comboCount);
 
         foreach (var blocks in blockList)
         {
