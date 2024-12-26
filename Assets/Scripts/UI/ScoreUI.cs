@@ -9,11 +9,13 @@ public class ScoreUI : StaticUI
 {
     [SerializeField] Text bestScoreLb = null;
     [SerializeField] Text scoreLb = null;
+    [SerializeField] Text comboLb = null;
 
     int curScore = 0;
     protected override List<GameEventType> EventTypeList => new List<GameEventType>()
     {
         GameEventType.ChangeScore,
+        GameEventType.ChangeCombo,
     };
     protected override void ChildHandleGameEvent(GameEvent e)
     {
@@ -25,12 +27,19 @@ public class ScoreUI : StaticUI
                     ChangeScore(score);
                 }
                 break;
+            case GameEventType.ChangeCombo:
+                {
+                    var count = e.ReadInt;
+                    SetComboCount(count);
+                }
+                break;
         }
     }
 
     protected override void initChild(params object[] data)
     {
         ChangeScore(InGameManager.Instance.LoadScore);
+        SetComboCount(InGameManager.Instance.LoadCombo);
     }
     void SetScore()
     {
@@ -61,5 +70,9 @@ public class ScoreUI : StaticUI
             bestScore = curScore;
         }
         bestScoreLb.text = $"{bestScore}";
+    }
+    void SetComboCount(int count)
+    {
+        comboLb.text = $"{count}";
     }
 }
