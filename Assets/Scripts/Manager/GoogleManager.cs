@@ -8,13 +8,22 @@ public class GoogleManager : MonoBehaviour
 {
     private void Start()
     {
-        //PlayGamesPlatform.DebugLogEnabled = true;
+        PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
-        //SignIn();
+        SignIn();
     }
     public void SignIn()
     {
-        PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+        if(PlayGamesPlatform.Instance.localUser.authenticated == false)
+        {
+            Social.localUser.Authenticate((bool success) =>
+            {
+                if (success)
+                {
+
+                }
+            });
+        }
     }
     internal void ProcessAuthentication(SignInStatus status)
     {

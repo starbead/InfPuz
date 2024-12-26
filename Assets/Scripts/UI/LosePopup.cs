@@ -40,7 +40,7 @@ public class LosePopup : StaticUI
     }
     void RecordLeaderBoard(int score)
     {
-        PlayGamesPlatform.Instance.localUser.Authenticate((bool success) =>
+        Social.localUser.Authenticate((bool success) =>
         {
             if (success)
             {
