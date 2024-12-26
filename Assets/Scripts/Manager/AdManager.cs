@@ -71,8 +71,14 @@ public class AdManager : MonoBehaviour
         {
             curinterIdx += 1;
             if (interList.Count >= curinterIdx)
+            {
                 curinterIdx = 0;
+                LoadInterstitial();
+                return;
+            }
+
             LoadInterstitial();
+            ShowInterstitialAd();
         };
     }
     public void ShowInterstitialAd()
@@ -129,7 +135,11 @@ public class AdManager : MonoBehaviour
         Debug.LogError("Banner view failed to load an ad with error : " + error);
         curbannerIdx += 1;
         if (bannerList.Count >= curbannerIdx)
+        {
             curbannerIdx = 0;
+            return;
+        }
+        RequestBanner();
     }
     private void HandleOnAdClicked()
     {
