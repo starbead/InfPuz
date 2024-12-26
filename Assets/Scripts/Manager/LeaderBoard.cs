@@ -9,7 +9,7 @@ public class LeaderBoard : MonoBehaviour
 {
     public void ShowLeaderBoard()
     {
-        Social.localUser.Authenticate((bool success) =>
+        PlayGamesPlatform.Instance.localUser.Authenticate((bool success) =>
         {
             if (success)
             {

@@ -16,7 +16,7 @@ public class GoogleManager : MonoBehaviour
     {
         if(PlayGamesPlatform.Instance.localUser.authenticated == false)
         {
-            Social.localUser.Authenticate((bool success) =>
+            PlayGamesPlatform.Instance.localUser.Authenticate((bool success) =>
             {
                 if (success)
                 {
