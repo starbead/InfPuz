@@ -1,3 +1,4 @@
+using GooglePlayGames;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,7 @@ public class LosePopup : StaticUI
                     delayButtonTimer = 1f;
                     var score = e.ReadInt;
                     SetGameScore(score);
+                    RecordLeaderBoard(score);
                     InGameManager.Instance.DeleteData();
                     GameManager.Instance.adManager.ShowInterstitialAd();
                 }
@@ -35,6 +37,16 @@ public class LosePopup : StaticUI
     void SetGameScore(int score)
     {
         ScoreLb.text = $"{score}";
+    }
+    void RecordLeaderBoard(int score)
+    {
+        PlayGamesPlatform.Instance.ReportScore(score, GPGSIds.leaderboard_countup, (bool success) =>
+        {
+            if(success)
+            {
+
+            }
+        });
     }
     public void OnClick_ReStart()
     {
