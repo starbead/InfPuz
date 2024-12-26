@@ -40,11 +40,17 @@ public class LosePopup : StaticUI
     }
     void RecordLeaderBoard(int score)
     {
-        PlayGamesPlatform.Instance.ReportScore(score, GPGSIds.leaderboard_countup, (bool success) =>
+        PlayGamesPlatform.Instance.localUser.Authenticate((bool success) =>
         {
-            if(success)
+            if (success)
             {
+                PlayGamesPlatform.Instance.ReportScore(score, GPGSIds.leaderboard_countup, (bool success) =>
+                {
+                    if (success)
+                    {
 
+                    }
+                });
             }
         });
     }

@@ -9,6 +9,12 @@ public class LeaderBoard : MonoBehaviour
 {
     public void ShowLeaderBoard()
     {
-        PlayGamesPlatform.Instance.ShowLeaderboardUI(GPGSIds.leaderboard_countup);
+        PlayGamesPlatform.Instance.localUser.Authenticate((bool success) =>
+        {
+            if (success)
+            {
+                PlayGamesPlatform.Instance.ShowLeaderboardUI(GPGSIds.leaderboard_countup);
+            }
+        });
     }
 }
