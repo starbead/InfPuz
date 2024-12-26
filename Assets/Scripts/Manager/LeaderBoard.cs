@@ -9,11 +9,11 @@ public class LeaderBoard : MonoBehaviour
 {
     public void ShowLeaderBoard()
     {
-        Social.localUser.Authenticate((bool success) =>
+        PlayGamesPlatform.Instance.localUser.Authenticate((bool success) =>
         {
-            if(success)
+            if (success)
             {
-                ((PlayGamesPlatform)Social.Active).ShowLeaderboardUI(GPGSIds.leaderboard_countup);
+                PlayGamesPlatform.Instance.ShowLeaderboardUI(GPGSIds.leaderboard_countup);
             }
         });
     }

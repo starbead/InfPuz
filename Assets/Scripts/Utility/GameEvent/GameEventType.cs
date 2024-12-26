@@ -30,4 +30,9 @@ public enum GameEventType
     /// 콤보 연출
     /// </summary>
     EffectCombo,
+
+    /// <summary>
+    /// 콤보 카운트
+    /// </summary>
+    ChangeCombo,
 }

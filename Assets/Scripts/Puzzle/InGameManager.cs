@@ -49,6 +49,7 @@ public class InGameManager : MonoBehaviour
         var count = board.BreakBlock(index1, index2);
         
         puzzleData.comboCount = count >= 3 ? puzzleData.comboCount + 1 : 0;
+        GameEventSubject.SendGameEvent(GameEventType.ChangeCombo, puzzleData.comboCount);
         if (puzzleData.isCombo)
         {
             board.SetDummyBlock(true);
@@ -117,4 +118,5 @@ public class InGameManager : MonoBehaviour
 
     public bool isCombo => puzzleData.comboCount >= 3;
     public int LoadScore => puzzleData.curScore;
+    public int LoadCombo => puzzleData.comboCount;
 }

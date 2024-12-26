@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using GoogleMobileAds.Api;
 using System;
-using Newtonsoft.Json.Linq;
 
 public class AdManager : MonoBehaviour
 {
     // Àü¸é±¤°í
     private InterstitialAd interstitial = null;
     private string interstitial_adUnitID = "";
+    private int curinterIdx = 0;
 
     // ¹è³Ê±¤°í
     private BannerView bannerView = null;
     private string banner_adUnitID = "";
+    private int curbannerIdx = 0;
 
+    List<string> interList = new List<string>();
+    List<string> bannerList = new List<string>();
     private void Start()
     {
         MobileAds.Initialize((InitializationStatus initStatus) =>
@@ -22,20 +25,29 @@ public class AdManager : MonoBehaviour
             // This callback is called once the MobileAds SDK is initialized.
 
         });
+        interList.Add("ca-app-pub-8592016599659735/3307603504");
+        interList.Add("ca-app-pub-8592016599659735/3375293361");
+        interList.Add("ca-app-pub-8592016599659735/9286063775");
+
+        bannerList.Add("ca-app-pub-8592016599659735/3040010198");
+        bannerList.Add("ca-app-pub-8592016599659735/1599145449");
+        bannerList.Add("ca-app-pub-8592016599659735/1938088619");
+
         RequestBanner();
         LoadInterstitial();
     }
     void LoadInterstitial()
     {
 #if UNITY_ANDROID
-        interstitial_adUnitID = "ca-app-pub-8592016599659735/3307603504";
+        interstitial_adUnitID = interList[curinterIdx];
+        //interstitial_adUnitID = "ca-app-pub-8592016599659735/3307603504";
         //interstitial_adUnitID = "ca-app-pub-3940256099942544/1033173712"; // TEST
 #elif UNITY_IPHONE
         interstitial_adUnitID = "ca-app-pub-3940256099942544/4411468910";
 #else
         interstitial_adUnitID = "unexpected_platform";
 #endif
-
+        interstitial_adUnitID = interList[curinterIdx];
         if (interstitial != null)
         {
             interstitial.Destroy();
@@ -57,6 +69,9 @@ public class AdManager : MonoBehaviour
         };
         interstitial.OnAdFullScreenContentFailed += (AdError error) =>
         {
+            curinterIdx += 1;
+            if (interList.Count >= curinterIdx)
+                curinterIdx = 0;
             LoadInterstitial();
         };
     }
@@ -77,7 +92,8 @@ public class AdManager : MonoBehaviour
     void RequestBanner()
     {
 #if UNITY_ANDROID
-        banner_adUnitID = "ca-app-pub-8592016599659735/3040010198";
+        banner_adUnitID = bannerList[curbannerIdx];
+        //banner_adUnitID = "ca-app-pub-8592016599659735/3040010198";
         //banner_adUnitID = "ca-app-pub-3940256099942544/6300978111";   // TEST
 #elif UNITY_IPHONE
         banner_adUnitID = "ca-app-pub-3940256099942544/2934735716";
@@ -111,6 +127,9 @@ public class AdManager : MonoBehaviour
     private void HandleOnAdLoadFailed(LoadAdError error)
     {
         Debug.LogError("Banner view failed to load an ad with error : " + error);
+        curbannerIdx += 1;
+        if (bannerList.Count >= curbannerIdx)
+            curbannerIdx = 0;
     }
     private void HandleOnAdClicked()
     {
