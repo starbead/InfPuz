@@ -10,9 +10,9 @@ public class Blocks : MonoBehaviour
     [SerializeField] SpriteRenderer iceIcon = null;
 
     [Space(5)]
-    [SerializeField] ParticleEffect[] effects = null;
     [SerializeField] Animator _animator = null;
 
+    string effectpath = "Effects/MatchKit/Game/";
     int xIndex = -1;
     int yIndex = -1;
     float speed = 0.3f;
@@ -58,7 +58,8 @@ public class Blocks : MonoBehaviour
     {
         if (curIdx == 0) return;
         // Æø¹ß ¿¬Ãâ
-        var obj = Instantiate(effects[curIdx]);
+        var path = effectpath + $"Block{curIdx}Particles";
+        var obj = Resource.LoadResource(path, ResourceState.PoolObject, null, 20);
         obj.transform.position = InGameManager.Instance.GetPos(xIndex, yIndex);
         HideBlock();
     }

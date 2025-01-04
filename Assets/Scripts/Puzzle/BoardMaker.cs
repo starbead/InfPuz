@@ -26,7 +26,7 @@ public class BoardMaker : MonoBehaviour
     int row = 5;
     int col = 9;
     int breakCount = 0;
-    public PuzzleData puzzledata = null;
+    PuzzleData puzzledata = null;
     public void initData(PuzzleData data, bool isLoadData)
     {
         puzzledata = data;
@@ -171,42 +171,26 @@ public class BoardMaker : MonoBehaviour
         if (value == 0) return;
         // 좌측
         if (j > 0 && puzzledata.board[i, j - 1] == value)
-        {
-            puzzledata.board[i, j - 1] = 0;
-            blockList[i][j - 1].Explode();
-            puzzledata.AddSocre(1);
-            breakCount += 1;
-            BreakBlock_Recursive(i, j - 1, value);
-        }
+            Explode(i, j - 1, value);
 
         // 우측
         if (j < row - 1 && puzzledata.board[i, j + 1] == value)
-        {
-            puzzledata.board[i, j + 1] = 0;
-            blockList[i][j + 1].Explode();
-            puzzledata.AddSocre(1);
-            breakCount += 1;
-            BreakBlock_Recursive(i, j + 1, value);
-        }
+            Explode(i, j + 1, value);
 
         // 상단
         if (i > 0 && puzzledata.board[i - 1, j] == value)
-        {
-            puzzledata.board[i - 1, j] = 0;
-            blockList[i - 1][j].Explode();
-            puzzledata.AddSocre(1);
-            breakCount += 1;
-            BreakBlock_Recursive(i - 1, j, value);
-        }
+            Explode(i - 1, j, value);
 
         // 하단
         if (i < col - 1 && puzzledata.board[i + 1, j] == value)
-        {
-            puzzledata.board[i + 1, j] = 0;
-            blockList[i + 1][j].Explode();
-            puzzledata.AddSocre(1);
-            breakCount += 1;
-            BreakBlock_Recursive(i + 1, j, value);
-        }
+            Explode(i + 1, j, value);
+    }
+    void Explode(int i, int j, int value)
+    {
+        puzzledata.board[i, j] = 0;
+        blockList[i][j].Explode();
+        puzzledata.AddSocre(1);
+        breakCount += 1;
+        BreakBlock_Recursive(i, j, value);
     }
 }
